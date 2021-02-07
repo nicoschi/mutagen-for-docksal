@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Create and manage a docksal project with mutagen (for help: fin mutagen)
+## Create and manage a Docksal project with Mutagen (for help: fin mutagen)
 
 if [ "$TERM" != "dumb" ]; then
 	red='\033[0;91m'
@@ -16,8 +16,8 @@ start() {
     if [[ -z $(fin config get MUTAGEN) ]]; then
       new_project=false
 
-      echo -e "${red}WARNING${NC}${yellow}: A docksal project already exists.${NC}"
-      read -rp "You can start mutagen after project containers reset
+      echo -e "${red}WARNING${NC}${yellow}: A Docksal project already exists.${NC}"
+      read -rp "You can start Mutagen project after project containers reset
 which may produce data loss (ie. database tables).
 Do you want to proceed: [y/n] " proceed
 
@@ -117,10 +117,10 @@ usage() {
 Usage: fin mutagen [command]
 
 Commands:
-start               Start / initialize and start / convert and start a docksal project and mutagen
-stop [options]      Stop docksal project and terminate mutagen (if already existing)
+start               Start / initialize and start / convert and start a Docksal project alongside with a Mutagen project
+stop [options]      Stop Docksal project and terminate Mutagen project (if already existing)
   -nr               Do not remove cli container (automatically recreated on start)
-restart [options]   Restart docksal project and terminate mutagen (if already existing)
+restart [options]   Restart Docksal project and Mutagen project (if already existing)
   -nr               Do not remove cli container (automatically recreated on start)'
 }
 
