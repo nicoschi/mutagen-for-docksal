@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+
+## Create and manage a docksal project with mutagen (for help: fin mutagen)
+
+if [ "$TERM" != "dumb" ]; then
+	red='\033[0;91m'
+	green='\033[0;32m'
+	yellow='\033[0;33m'
+  NC='\033[0m'
+fi
+
+mutagen > /dev/null 2>&1 || { echo "Error: Mutagen not installed"; exit 1; }
+
+start() {
+  if fin config env > /dev/null 2>&1 ; then
+    if [[ -z $(fin config get MUTAGEN) ]]; then
+      new_project=false
+
+      echo -e "${red}WARNING${NC}${yellow}: A docksal project already exists.${NC}"
+      read -rp "You can start mutagen after project containers reset
+which may produce data loss (ie. database tables).
+Do you want to proceed: [y/n] " proceed
+
+      if [ "$proceed" == y ] || [ "$proceed" == Y ] ; then
+        init $new_project
+      else
+        echo 'Aborting'
+        return
+      fi
+    fi
+  else
+    init true
+  fi
+
+  project_root=$(fin config get PROJECT_ROOT)
+  cd "${project_root//\"/}" || { echo "Cannot start"; exit 1; }
+
+  if [ -z $new_project ]; then
+    fin start
+  fi
+
+  mutagen project start
+}
+
+stop() {
+  project_root=$(fin config get PROJECT_ROOT)
+
+  cd "${project_root//\"/}" || { echo "Cannot stop"; exit 1; }
+
+  mutagen project terminate
+  fin stop
+
+  if [ -z "$1" ]; then
+    fin rm cli
+  fi
+}
+
+restart() {
+    stop "$1"
+    start
+}
+
+init() {
+  if [ "$1" == true ]; then
+    fin config generate
+  fi
+
+  fin config set MUTAGEN=1
+  fin config set PROJECT_ROOT="$(fin config | grep PROJECT_ROOT | sed 's/PROJECT_ROOT: //')"
+  fin config set PROJECT_NAME="$(fin config | grep COMPOSE_PROJECT_NAME_SAFE | sed 's/COMPOSE_PROJECT_NAME_SAFE: //')"
+  fin config set DOCKSAL_VOLUMES=none
+  create_mutagen_config
+
+  if [ "$1" == false ]; then
+    fin rm
+    fin up
+  fi
+}
+
+create_mutagen_config() {
+  project_root=$(fin config get PROJECT_ROOT)
+  project_root="${project_root//\"/}"
+
+  if [ ! -f "$project_root/mutagen.yml" ]; then
+    project_name=$(fin config get PROJECT_NAME)
+    project_name="${project_name//\"/}"
+
+    docroot=$(fin config get DOCROOT)
+    docroot="${docroot//\"/}"
+
+    cd "$project_root" ||  { echo "Cannot create a mutagen.yml configuration in $project_root"; exit 1; }
+
+    docroot_array=$(echo "$docroot" | tr '/' ' ')
+    real_docroot=${docroot_array[0]}
+
+    beta="docker://docker@$project_name""_cli_1/var/www/$real_docroot"
+
+    echo "sync:
+  defaults:
+    flushOnCreate: true
+    ignore:
+      vcs: true
+    permissions:
+      defaultFileMode: 644
+      defaultDirectoryMode: 755
+  code:
+    alpha: './$real_docroot'
+    beta: '$beta'
+    mode: 'two-way-resolved'" > mutagen.yml
+
+    echo 'mutagen.yml configuration created' in "$project_root"
+  fi
+}
+
+usage() {
+  echo '
+Usage: fin mutagen [command]
+
+Commands:
+start               Start / initialize and start / convert and start a docksal project and mutagen
+stop [options]      Stop docksal project and terminate mutagen (if already existing)
+  -nr               Do not remove cli container (automatically recreated on start)
+restart [options]   Restart docksal project and terminate mutagen (if already existing)
+  -nr               Do not remove cli container (automatically recreated on start)'
+}
+
+check_options() {
+  if [[ -z $(fin config get MUTAGEN) ]] && { [ "$1" == 'stop' ] || [ "$1" == 'restart' ]; }; then
+      usage
+      exit 1
+  fi
+
+  if [ "$1" == 'start' ] && [ "$2" ]; then
+    usage
+    exit 1
+  fi
+
+  if [ "$2" ] && [ "$2" != '-nr' ]; then
+    usage
+    exit 1
+  fi
+}
+
+case $1 in
+  "start")
+    check_options "$@"
+    start
+    ;;
+  "stop")
+    check_options "$@"
+    stop "$2"
+    ;;
+  "restart")
+    check_options "$@"
+    restart "$2"
+    ;;
+  *)
+    usage
+    ;;
+esac
