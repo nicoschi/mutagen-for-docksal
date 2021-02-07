@@ -1,6 +1,6 @@
 # Mutagen for Docksal
 
-A custom global command for [Docksal](https://docs.docksal.io/) to create and manage a Docksal project with a [Mutagen](https://mutagen.io/documentation/introduction/installation) configuration to boost up performances.
+A custom global command for [Docksal](https://docs.docksal.io/) to create and manage a Docksal project alongside with a [Mutagen project](https://mutagen.io/documentation/orchestration/projects) configuration to boost up performances.
 
 ## Requirements
 
@@ -25,12 +25,12 @@ chmd +x mutagen
 Commands:
 
 start               Start / initialize and start / convert and start 
-                    a Docksal project with a Mutagen daemon
+                    a Docksal project alongside with a Mutagen project
  
-stop [options]      Stop Docksal project and terminate Mutagen (if already existing)
+stop [options]      Stop Docksal project and terminate Mutagen project (if already existing)
     -nr             Do not remove cli container (automatically recreated on start)
     
-restart [options]   Restart Docksal project and terminate Mutagen (if already existing)
+restart [options]   Restart Docksal project and Mutagen project (if already existing)
     -nr             Do not remove cli container (automatically recreated on start)
 ```
 
@@ -38,9 +38,9 @@ restart [options]   Restart Docksal project and terminate Mutagen (if already ex
 
 Start command will: 
 
-- **create** a new Docksal project with a Mutagen configuration and start it
-- if a Docksal project already exist, **convert** it in a project with Mutagen configuration and **start it**. **A warning will be displayed before proceed because this will recreate docksal containers causing possible data loss (ie.: database tables). So backup data before using it.**
-- **simply start** a Docksal project already using a Mutagen configuration previously created with start command
+- **create** a new Docksal project alongside with a Mutagen project configuration and start them
+- if a Docksal project already exist, **convert** it in a project with a Mutagen project configuration and **start it**. **A warning will be displayed before proceed because this will recreate docksal containers causing possible data loss (ie.: database tables). So backup data before using it.**
+- **simply start** a Docksal project already using a Mutagen project configuration previously created with start command
 
 ### Stop and restart
 
