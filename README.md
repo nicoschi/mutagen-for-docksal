@@ -13,8 +13,8 @@ Downlaod Mutagen command inside global Docksal commands and make it executable:
 
 ```shell
 cd ~/.docksal/commands/
-curl https://raw.githubusercontent.com/nicoschi/mutagen-for-docksal/master/mutagen
-chmd +x mutagen
+curl https://raw.githubusercontent.com/nicoschi/mutagen-for-docksal/master/mutagen > mutagen
+chmod +x mutagen
 ```
 
 ## Usage
