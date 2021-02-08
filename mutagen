@@ -9,8 +9,8 @@ if [ "$TERM" != "dumb" ]; then
   NC='\033[0m'
 fi
 
-mutagen > /dev/null 2>&1 || { echo "Error: Mutagen not installed"; exit 1; }
-docker ps > /dev/null 2>&1 || { echo "Error: Docker not running"; exit 1; }
+mutagen > /dev/null 2>&1 || { echo -e "${red}Error${NC}${yellow}: Mutagen not installed${NC}"; exit 1; }
+docker ps > /dev/null 2>&1 || { echo -e "${red}Error${NC}${yellow}: Docker not running${NC}"; exit 1; }
 
 start() {
   if fin config env > /dev/null 2>&1 ; then
