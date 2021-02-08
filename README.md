@@ -77,9 +77,9 @@ sync:
     mode: 'two-way-resolved'
 ```
 
-After configuration creation `betadir` will be replaced by `docker://docker@{project_name}_cli_1/var/www` where `{project_name}` is the Docksal project name set in configurations variables.
+On configuration creation `betadir` will be replaced by `docker://docker@{project_name}_cli_1/var/www` where `{project_name}` is the Docksal project name set in configurations variables.
 
-After creation you can customize the configuration as needed and launch `fin mutagen restart`.
+After creation, you can customize the configuration as needed and launch `fin mutagen restart`.
 
 ## Docksal Configuration Variables
 
