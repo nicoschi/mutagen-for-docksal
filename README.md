@@ -1,6 +1,6 @@
 # Mutagen for Docksal
 
-A custom global command for [Docksal](https://docs.docksal.io/) to create and manage a Docksal project alongside with a [Mutagen project](https://mutagen.io/documentation/orchestration/projects) to boost up underlying Docker performances on MacOS and Windows.
+A custom global command for [Docksal](https://docs.docksal.io/) to create and manage a [Mutagen project](https://mutagen.io/documentation/orchestration/projects) inside a Docksal one to boost up underlying Docker filesystem performances on MacOS and Windows.
 
 ## Requirements
 
@@ -9,7 +9,7 @@ A custom global command for [Docksal](https://docs.docksal.io/) to create and ma
 
 ## Installation
 
-Downlaod Mutagen command inside global Docksal commands and make it executable: 
+Downlaod `mutagen` command inside global Docksal commands and make it executable: 
 
 ```shell
 cd ~/.docksal/commands/
@@ -41,23 +41,22 @@ restart [options]   Restart Docksal project and Mutagen project (if already exis
 Start command will: 
 
 - **create** a new Docksal project alongside with a Mutagen project configuration and start them
-- if a Docksal project already exist, **convert** it in a project with a Mutagen project configuration and **start it**. **A warning will be displayed before proceed because this will recreate docksal containers causing possible data loss (ie.: database tables). So backup data before using it.**
+- if a Docksal project already exist, **convert** it in a project with a Mutagen project configuration **and start it**. 
+  **A warning will be displayed before proceed because this will recreate docksal containers causing possible data loss (ie.: database tables). So backup data before using it.**
 - **simply start** a Docksal project already using a Mutagen project configuration previously created with start command
 
 ### Stop and restart
 
-Stop and restart a Docksal project alongside with Mutagen project inside it. 
+**Stop** or **restart** a Docksal project alongside with Mutagen project **and delete the cli container** (automatically recreated on start) to preserve disk space during project inactivity.
 
-By default these commands will delete the cli container (automatically recreated on start) to preserve disk space during project inactivity.
-
-If you don't want destroy and recreate the cli container on stop and restart use:
+**If you don't want** to delete the cli container on stop and restart **use**:
 
 - `stop -nr`
 - `restart -nr`
 
-The default setting is due to the fact that a Docksal project which uses Mutagen will use `DOCKSAL_VOLUMES="none"` to speed up performances as stated in [Docksal Shared Volumes Documentation](https://docs.docksal.io/core/volumes/). 
+The default setting is due to the fact that a Docksal project which uses Mutagen will use `DOCKSAL_VOLUMES="none"` to speed up filesystem performances as stated in [Docksal Shared Volumes Documentation](https://docs.docksal.io/core/volumes/). 
 
-With this option enabled the codebase on the host has to be synced inside the cli container (action which Mutagen will take care of) resulting in higher disk space usage (double the size of the codebase).
+With this option enabled the codebase on the host has to be mirrored and continuously synced inside the cli container (action which Mutagen will take care of) resulting in higher disk space usage (double the size of the codebase).
 
 ## Mutagen default configuration
 
@@ -93,4 +92,8 @@ On project creation inside the `./docksal/docksal.env` will be created some new 
 
 ## Further readings
 
+- [Docker containers file system performance under different scenarios](https://github.com/docksal/docksal/issues/249)
+- [Why is Docker on macOS So Much Worse Than Linux? ](https://dev.to/ericnograles/why-is-docker-on-macos-so-much-worse-than-linux-flh)
+- [Shared Volumes](https://docs.docksal.io/core/volumes/)
 - [Docksal Custom Commands](https://docs.docksal.io/fin/custom-commands)
+
