@@ -90,10 +90,7 @@ create_mutagen_config() {
 
     cd "$project_root" ||  { echo "Cannot create a mutagen.yml configuration in $project_root"; exit 1; }
 
-    docroot_array=$(echo "$docroot" | tr '/' ' ')
-    real_docroot=${docroot_array[0]}
-
-    beta="docker://docker@$project_name""_cli_1/var/www/$real_docroot"
+    beta="docker://docker@$project_name""_cli_1/var/www"
 
     echo "sync:
   defaults:
@@ -104,7 +101,7 @@ create_mutagen_config() {
       defaultFileMode: 644
       defaultDirectoryMode: 755
   code:
-    alpha: './$real_docroot'
+    alpha: './'
     beta: '$beta'
     mode: 'two-way-resolved'" > mutagen.yml
 
