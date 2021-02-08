@@ -42,7 +42,7 @@ Start command will:
 
 - **create** a new Docksal project alongside with a Mutagen project configuration and start them
 - if a Docksal project already exist, **convert** it in a project with a Mutagen project configuration **and start it**. 
-  **A warning will be displayed before proceed because this will recreate docksal containers causing possible data loss (ie.: database tables). So backup data before using it.**
+  **A warning will be prompt asking confirmation before proceeding because this will recreate docksal containers causing possible data loss (ie.: database tables). So backup data before using it.**
 - **simply start** a Docksal project already using a Mutagen project configuration previously created with start command
 
 ### Stop and restart
@@ -60,7 +60,7 @@ With this option enabled the codebase on the host has to be mirrored and continu
 
 ## Mutagen default configuration
 
-This is the default Mutagen project configuration will be created in the root of the Docksal project on first start and you can customize later:
+This is the default Mutagen project configuration will be created in the root of the Docksal project on first start:
 
 ```yaml
 sync:
@@ -72,15 +72,14 @@ sync:
       defaultFileMode: 644
       defaultDirectoryMode: 755
   code:
-    alpha: 'alphadir'
+    alpha: './'
     beta: 'betadir'
     mode: 'two-way-resolved'
 ```
 
-After configuration creation: 
+After configuration creation `betadir` will be replaced by `docker://docker@{project_name}_cli_1/var/www` where `{project_name}` is the Docksal project name set in configurations variables.
 
-- `alphadir` will be repleced by the docroot relative path of the Docksal project
-- `betadir` will be replaced by `docker://docker@{project_name}_cli_1/var/www/{docroot}` where `{project_name}` and `{docroot}` are respectively the Docksal project name and docroot.
+After creation you can customize the configuration as needed and launch `fin mutagen restart`.
 
 ## Docksal Configuration Variables
 
