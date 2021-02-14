@@ -2,6 +2,8 @@
 
 ## Create and manage a Docksal project with Mutagen (for help: fin mutagen)
 
+VERSION=0.1.0
+
 if [ "$TERM" != "dumb" ]; then
 	red='\033[0;91m'
 	green='\033[0;32m'
@@ -110,6 +112,31 @@ create_mutagen_config() {
   fi
 }
 
+update() {
+  latest_release=$(curl --silent "https://api.github.com/repos/nicoschi/test/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
+  if [ "$latest_release" != "$VERSION" ]; then
+    echo -e "${yellow}New release found ($latest_release):
+Do you want to proceed with the update:${NC} [y/n] "
+    read -rp "" proceed
+    if [ "$proceed" == y ] || [ "$proceed" == Y ] ; then
+      echo -e "${yellow}Overriding mutagen command in ~/.docksal/commands/${NC}"
+      curl "https://raw.githubusercontent.com/nicoschi/mutagen-for-docksal/$latest_release/README.md" > ~/.docksal/commands/test.md
+      echo -e "
+${green}Update done. 'fin mutagen' is now at version $latest_release ${NC}"
+    else
+      echo 'Aborting'
+      return
+    fi
+  else
+    echo -e "${green}Latest release ($VERSION) is already installed${NC}"
+  fi
+}
+
+version() {
+  echo -e "$VERSION"
+}
+
 usage() {
   echo '
 Usage: fin mutagen [command]
@@ -119,7 +146,9 @@ start               Start / initialize and start / convert and start a Docksal p
 stop [options]      Stop Docksal project and terminate Mutagen project (if already existing)
   -nr               Do not remove cli container (automatically recreated on start)
 restart [options]   Restart Docksal project and Mutagen project (if already existing)
-  -nr               Do not remove cli container (automatically recreated on start)'
+  -nr               Do not remove cli container (automatically recreated on start)
+version             Print "fin mutagen" version
+update              Check for updates and update to a new release if exists and you want'
 }
 
 check_options() {
@@ -151,6 +180,12 @@ case $1 in
   "restart")
     check_options "$@"
     restart "$2"
+    ;;
+  "update")
+    update
+    ;;
+  "version")
+    version
     ;;
   *)
     usage

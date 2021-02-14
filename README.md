@@ -34,6 +34,10 @@ stop [options]      Stop Docksal project and terminate Mutagen project (if alrea
     
 restart [options]   Restart Docksal project and Mutagen project (if already existing)
     -nr             Do not remove cli container (automatically recreated on start)
+
+version             Print "fin mutagen" version
+
+update              Check for updates and update to a new release if exists and you want
 ```
 
 ### Start
