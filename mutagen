@@ -88,9 +88,6 @@ create_mutagen_config() {
     project_name=$(fin config get PROJECT_NAME)
     project_name="${project_name//\"/}"
 
-    docroot=$(fin config get DOCROOT)
-    docroot="${docroot//\"/}"
-
     cd "$project_root" ||  { echo "Cannot create a mutagen.yml configuration in $project_root"; exit 1; }
 
     beta="docker://docker@$project_name""_cli_1/var/www"
