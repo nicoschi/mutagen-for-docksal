@@ -12,7 +12,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 mutagen > /dev/null 2>&1 || { echo -e "${red}Error${NC}${yellow}: Mutagen not installed${NC}"; exit 1; }
-docker ps > /dev/null 2>&1 || { echo -e "${red}Error${NC}${yellow}: Docker not running${NC}"; exit 1; }
+fin docker ps > /dev/null 2>&1 || { echo -e "${red}Error${NC}${yellow}: Docker not running${NC}"; exit 1; }
 
 start() {
   if fin config env > /dev/null 2>&1 ; then
