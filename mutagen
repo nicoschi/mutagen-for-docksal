@@ -2,7 +2,7 @@
 
 ## Create and manage a Docksal project with Mutagen (for help: fin mutagen)
 
-VERSION=0.1.2
+VERSION=0.2.0
 
 if [ "$TERM" != "dumb" ]; then
 	red='\033[0;91m'
@@ -16,7 +16,7 @@ fin docker ps > /dev/null 2>&1 || { echo -e "${red}Error${NC}${yellow}: Docker n
 
 start() {
   if fin config env > /dev/null 2>&1 ; then
-    if [[ -z $(fin config get MUTAGEN) ]]; then
+    if [[ -z $(get_fin_variable "MUTAGEN") ]]; then
       new_project=false
 
       echo -e "${red}WARNING${NC}${yellow}: A Docksal project already exists.${NC}"
@@ -35,7 +35,7 @@ Do you want to proceed: [y/n] " proceed
     init true
   fi
 
-  project_root=$(fin config get PROJECT_ROOT)
+  project_root=$(get_fin_variable "PROJECT_ROOT")
   cd "${project_root//\"/}" || { echo "Cannot start"; exit 1; }
 
   if [ -z $new_project ]; then
@@ -46,7 +46,7 @@ Do you want to proceed: [y/n] " proceed
 }
 
 stop() {
-  project_root=$(fin config get PROJECT_ROOT)
+  project_root=$(get_fin_variable "PROJECT_ROOT")
 
   cd "${project_root//\"/}" || { echo "Cannot stop"; exit 1; }
 
@@ -68,10 +68,10 @@ init() {
     fin config generate
   fi
 
-  fin config set MUTAGEN=1
-  fin config set PROJECT_ROOT="$(fin config | grep PROJECT_ROOT | sed 's/PROJECT_ROOT: //')"
-  fin config set PROJECT_NAME="$(fin config | grep COMPOSE_PROJECT_NAME_SAFE | sed 's/COMPOSE_PROJECT_NAME_SAFE: //')"
-  fin config set DOCKSAL_VOLUMES=none
+  set_fin_variable "MUTAGEN" 1
+  set_fin_variable "PROJECT_ROOT" "$(fin config | grep PROJECT_ROOT | sed 's/PROJECT_ROOT: //')"
+  set_fin_variable "PROJECT_NAME" "$(fin config | grep COMPOSE_PROJECT_NAME_SAFE | sed 's/COMPOSE_PROJECT_NAME_SAFE: //')"
+  set_fin_variable "DOCKSAL_VOLUMES" "none"
   create_mutagen_config
 
   if [ "$1" == false ]; then
@@ -81,15 +81,12 @@ init() {
 }
 
 create_mutagen_config() {
-  project_root=$(fin config get PROJECT_ROOT)
+  project_root=$(get_fin_variable "PROJECT_ROOT")
   project_root="${project_root//\"/}"
 
   if [ ! -f "$project_root/mutagen.yml" ]; then
-    project_name=$(fin config get PROJECT_NAME)
+    project_name=$(get_fin_variable "PROJECT_NAME")
     project_name="${project_name//\"/}"
-
-    docroot=$(fin config get DOCROOT)
-    docroot="${docroot//\"/}"
 
     cd "$project_root" ||  { echo "Cannot create a mutagen.yml configuration in $project_root"; exit 1; }
 
@@ -151,8 +148,22 @@ version             Print "fin mutagen" version
 update              Check for updates and update to a new release if exists and you want'
 }
 
+get_fin_variable() {
+  variable=$(fin config get --env=local "$1" 2> /dev/null)
+
+  if [ -z "$variable" ]; then
+    fin config get "$1" 2> /dev/null
+  else
+    echo "$variable"
+  fi
+}
+
+set_fin_variable() {
+  fin config set --env=local "$1"="$2"
+}
+
 check_options() {
-  if [[ -z $(fin config get MUTAGEN) ]] && { [ "$1" == 'stop' ] || [ "$1" == 'restart' ]; }; then
+  if [[ -z $(get_fin_variable "MUTAGEN") ]] && { [ "$1" == 'stop' ] || [ "$1" == 'restart' ]; }; then
       usage
       exit 1
   fi

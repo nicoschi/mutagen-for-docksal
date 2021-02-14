@@ -87,11 +87,13 @@ After creation, you can customize the configuration as needed and launch `fin mu
 
 ## Docksal Configuration Variables
 
-On project creation inside the `./docksal/docksal.env` will be created some new configurations variables: 
+On project creation if doesn't exist a [docksal-local.env file](https://docs.docksal.io/stack/understanding-stack-config/#docksal-local) inside the `./docksal` folder and some variables will populate it: 
 
 - `MUTAGEN="1"` indicating the project is using Mutagen
 - `PROJECT_ROOT="/absolute/host/path/to/docksal/project"`
 - `PROJECT_NAME="project_name"` coinciding with docksal project root folder name
+
+If you want you can move these variable in `./docksal/docksal.env` and delete `.docksal/docksal-local.env` file.
 
 ## Further readings
 
