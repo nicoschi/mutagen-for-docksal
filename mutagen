@@ -2,7 +2,7 @@
 
 ## Create and manage a Docksal project with Mutagen (for help: fin mutagen)
 
-VERSION=0.1.1
+VERSION=0.1.2
 
 if [ "$TERM" != "dumb" ]; then
 	red='\033[0;91m'
@@ -113,7 +113,7 @@ create_mutagen_config() {
 }
 
 update() {
-  latest_release=$(curl --silent "https://api.github.com/repos/nicoschi/test/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  latest_release=$(curl --silent "https://api.github.com/repos/nicoschi/mutagen-for-docksal/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
   if [ "$latest_release" != "$VERSION" ]; then
     echo -e "${yellow}New release found ($latest_release):
@@ -121,7 +121,7 @@ Do you want to proceed with the update:${NC} [y/n] "
     read -rp "" proceed
     if [ "$proceed" == y ] || [ "$proceed" == Y ] ; then
       echo -e "${yellow}Overriding mutagen command in ~/.docksal/commands/${NC}"
-      curl "https://raw.githubusercontent.com/nicoschi/mutagen-for-docksal/$latest_release/README.md" > ~/.docksal/commands/test.md
+      curl "https://raw.githubusercontent.com/nicoschi/mutagen-for-docksal/$latest_release/mutagen" > ~/.docksal/commands/mutagen
       echo -e "
 ${green}Update done. 'fin mutagen' is now at version $latest_release ${NC}"
     else
