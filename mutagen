@@ -2,7 +2,7 @@
 
 ## Create and manage a Docksal project with Mutagen (for help: fin mutagen)
 
-VERSION=0.1.0
+VERSION=0.1.1
 
 if [ "$TERM" != "dumb" ]; then
 	red='\033[0;91m'
