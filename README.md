@@ -1,6 +1,6 @@
 # Mutagen for Docksal
 
-A custom global command for [Docksal](https://docs.docksal.io/) to create and manage a [Mutagen project](https://mutagen.io/documentation/orchestration/projects) inside a Docksal one to boost up underlying Docker filesystem performances on MacOS and Windows.
+A custom global command for [Docksal](https://docs.docksal.io/) to create and manage a [Mutagen project](https://mutagen.io/documentation/orchestration/projects) inside a Docksal one to boost up underlying Docker filesystem performances on MacOS.
 
 ## Requirements
 
