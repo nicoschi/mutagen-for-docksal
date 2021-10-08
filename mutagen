@@ -100,7 +100,7 @@ create_mutagen_config() {
     permissions:
       defaultFileMode: 644
       defaultDirectoryMode: 755
-  code:
+  ${project_name}-cli:
     alpha: './'
     beta: '$beta'
     mode: 'two-way-resolved'" > mutagen.yml
