@@ -39,11 +39,7 @@ Do you want to proceed: [y/n] " proceed
   cd "${project_root//\"/}" || { echo "Cannot start"; exit 1; }
 
   if [ -z $new_project ]; then
-    if [ -z "$1" ]; then
-      fin "$1"
-    else
-      fin start
-    fi
+    fin "$1"
   fi
 
   mutagen project start
@@ -64,7 +60,7 @@ stop() {
 
 restart() {
     stop "$1"
-    start
+    start start
 }
 
 init() {
