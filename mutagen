@@ -39,7 +39,7 @@ Do you want to proceed: [y/n] " proceed
   cd "${project_root//\"/}" || { echo "Cannot start"; exit 1; }
 
   if [ -z $new_project ]; then
-    fin start
+    fin "$1"
   fi
 
   mutagen project start
@@ -60,7 +60,7 @@ stop() {
 
 restart() {
     stop "$1"
-    start
+    start start
 }
 
 init() {
@@ -139,7 +139,7 @@ usage() {
 Usage: fin mutagen [command]
 
 Commands:
-start               Start / initialize and start / convert and start a Docksal project alongside with a Mutagen project
+start | up          Start / initialize and start / convert and start a Docksal project alongside with a Mutagen project
 stop [options]      Stop Docksal project and terminate Mutagen project (if already existing)
   -nr               Do not remove cli container (automatically recreated on start)
 restart [options]   Restart Docksal project and Mutagen project (if already existing)
@@ -168,7 +168,7 @@ check_options() {
       exit 1
   fi
 
-  if [ "$1" == 'start' ] && [ "$2" ]; then
+  if [[ "$1" == 'start' || "$1" == 'up' ]] && [ "$2" ]; then
     usage
     exit 1
   fi
@@ -180,9 +180,9 @@ check_options() {
 }
 
 case $1 in
-  "start")
+  "start"|"up")
     check_options "$@"
-    start
+    start "$1"
     ;;
   "stop")
     check_options "$@"
