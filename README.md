@@ -26,7 +26,7 @@ If no Docksal project exists you must launch it inside the folder you want to cr
 ```text
 Commands:
 
-start               Start / initialize and start / convert and start 
+start | up          Start / initialize and start / convert and start 
                     a Docksal project alongside with a Mutagen project
  
 stop [options]      Stop Docksal project and terminate Mutagen project (if already existing)
@@ -40,9 +40,9 @@ version             Print "fin mutagen" version
 update              Check for updates and update to a new release if exists and you want
 ```
 
-### Start
+### Start or Up
 
-Start command will: 
+Start or Up command will: 
 
 - **create** a new Docksal project alongside with a Mutagen project configuration and start them
 - if a Docksal project already exist, **convert** it in a project with a Mutagen project configuration **and start it**. 
@@ -81,7 +81,10 @@ sync:
     mode: 'two-way-resolved'
 ```
 
-On configuration creation `betadir` will be replaced by `docker://docker@{project_name}_cli_1/var/www` where `{project_name}` is the Docksal project name set in configurations variables.
+On configuration creation:
+
+- `code` will be replaced by `{project_name}-cli` where `{project_name}` is the Docksal project name set in configurations variables.
+- `betadir` will be replaced by `docker://docker@{project_name}_cli_1/var/www` where `{project_name}` is the Docksal project name set in configurations variables.
 
 After creation, you can customize the configuration as needed and launch `fin mutagen restart`.
 
