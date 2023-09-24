@@ -2,7 +2,7 @@
 
 ## Create and manage a Docksal project with Mutagen (for help: fin mutagen)
 
-VERSION=0.2.1
+VERSION=0.2.2
 
 if [ "$TERM" != "dumb" ]; then
 	red='\033[0;91m'
@@ -51,11 +51,12 @@ stop() {
   cd "${project_root//\"/}" || { echo "Cannot stop"; exit 1; }
 
   mutagen project terminate
-  fin stop
 
   if [ -z "$1" ]; then
     fin rm cli
   fi
+
+  fin stop
 }
 
 restart() {
